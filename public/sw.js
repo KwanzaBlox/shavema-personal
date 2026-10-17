@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shaverma-v1'
+const CACHE_NAME = 'shaverma-v2'
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -27,16 +27,17 @@ self.addEventListener('fetch', (event) => {
   // Не трогаем запросы к Supabase (внешний источник) и не-GET запросы.
   if (url.origin !== self.location.origin || request.method !== 'GET') return
 
+  // Сначала пробуем сеть (чтобы всегда получать свежую версию),
+  // кэш используем только как запасной вариант при отсутствии сети.
   event.respondWith(
-    caches.match(request).then((cached) => {
-      if (cached) return cached
-      return fetch(request).then((response) => {
+    fetch(request)
+      .then((response) => {
         if (response && response.status === 200) {
           const clone = response.clone()
           caches.open(CACHE_NAME).then((cache) => cache.put(request, clone))
         }
         return response
       })
-    }),
+      .catch(() => caches.match(request)),
   )
 })
