@@ -92,6 +92,22 @@ tests/calc.test.ts        # тесты расчётов
 7. Готовый адрес вида `https://....vercel.app` открой на телефоне и добавь
    на главный экран (PWA — манифест и иконки уже подключены).
 
+## Сборка Android APK
+
+Проект уже подготовлен (Capacitor + папка `android/`). Для сборки APK:
+
+1. Установи Android Studio — https://developer.android.com/studio
+2. Открой в Android Studio папку `android/` проекта (File → Open → выбрать папку android).
+3. Дождись первой синхронизации Gradle (скачает зависимости — займёт время).
+4. Перед сборкой обнови веб-часть:
+   ```bash
+   npm run build
+   npx cap sync android
+   ```
+5. В Android Studio: меню **Build → Build App Bundle(s) / APK(s) → Build APK(s)**.
+6. Готовый файл появится в `android/app/build/outputs/apk/debug/app-debug.apk`.
+   Его можно перекинуть на телефон и установить.
+
 ## Статус разработки
 
 Готово: этапы 2–9 (навигация, календарь, зарплата, касса, Excel-экспорт, авторизация,
